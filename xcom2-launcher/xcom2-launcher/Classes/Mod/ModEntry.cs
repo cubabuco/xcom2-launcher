@@ -17,17 +17,25 @@ namespace XCOM2Launcher.Mod
 {
     public class ModEntry
     {
-        [JsonIgnore] public const string DEFAULT_AUTHOR_NAME = "Unknown";
-        [JsonIgnore] public const string MODFILE_DISABLE_POSTFIX = "-disabled";
+        [JsonIgnore] 
+        public const string DEFAULT_AUTHOR_NAME = "Unknown";
+        [JsonIgnore] 
+        public const string MODFILE_DISABLE_POSTFIX = "-disabled";
 
-        [JsonIgnore] private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(nameof(ModEntry));
+        [JsonIgnore] 
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(nameof(ModEntry));
 
-        [JsonIgnore] private string _image;
+        [JsonIgnore] 
+        private string _image;
 
-        [JsonIgnore] private IEnumerable<ModClassOverride> _overrides;
-        [JsonIgnore] private static readonly Regex s_classOverridesRegex = new Regex("^[+]?ModClassOverrides=\\(BaseGameClass=\"([^\"]+)\",ModClass=\"([^\"]+)\"\\)", RegexOptions.Compiled);
-        [JsonIgnore] private static readonly Regex s_whitespaceRegex = new Regex("\\s+", RegexOptions.Compiled);
-        [JsonIgnore] private static readonly Regex s_screenClassRegex = new Regex(@"(?i)^\s*ScreenClass\s*=\s*(?:class')?([a-z_]+)", RegexOptions.Compiled);
+        [JsonIgnore] 
+        private IEnumerable<ModClassOverride> _overrides;
+        [JsonIgnore] 
+        private static readonly Regex s_classOverridesRegex = new Regex("^[+]?ModClassOverrides=\\(BaseGameClass=\"([^\"]+)\",ModClass=\"([^\"]+)\"\\)", RegexOptions.Compiled);
+        [JsonIgnore] 
+        private static readonly Regex s_whitespaceRegex = new Regex("\\s+", RegexOptions.Compiled);
+        [JsonIgnore] 
+        private static readonly Regex s_screenClassRegex = new Regex(@"(?i)^\s*ScreenClass\s*=\s*(?:class')?([a-z_]+)", RegexOptions.Compiled);
 
         /// <summary>
         ///     Index to determine mod load order
@@ -91,9 +99,6 @@ namespace XCOM2Launcher.Mod
         /// </summary>
         public List<string> SteamTags { get; set; } = new List<string>();
 
-        [JsonIgnore]
-        public bool HasBackedUpSettings => Settings.Count > 0;
-
         public List<ModSettingsEntry> Settings { get; set; } = new List<ModSettingsEntry>();
 
         [JsonIgnore]
@@ -102,12 +107,6 @@ namespace XCOM2Launcher.Mod
             get { return _image ?? FilePath.Combine(Path ?? "", "ModPreview.jpg"); }
             set { _image = value; }
         }
-
-        [JsonIgnore]
-        public string SteamLink => GetSteamLink();
-
-        [JsonIgnore]
-        public string BrowserLink => GetWorkshopLink();
 
         [Browsable(false)]
         public IList<string> Tags { get; set; } = new List<string>();

@@ -163,7 +163,6 @@
   <ItemGroup>
     <Compile Include="Classes\GitHub\Asset.cs" />
     <Compile Include="Classes\GitHub\Release.cs" />
-    <Compile Include="Classes\GitHub\User.cs" />
     <Compile Include="Classes\GlobalSettings.cs" />
     <Compile Include="Classes\Helper\FileSizeFormatExtension.cs" />
     <Compile Include="Classes\Helper\GitVersionInfo.cs" />

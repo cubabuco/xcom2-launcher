@@ -21,15 +21,7 @@ namespace XCOM2Launcher.Mod
         {
             return (generateColor(source, true, new HSB { H = 0, S = 0.2d, B = 255 }, new HSB { H = 360, S = 0.5d, B = 255 }));
         }
-        /// <summary>
-        /// Returns a random color
-        /// </summary>
-        /// <param name="source">Ignored(Use RandomShade to get a shade of given color)</param>
-        /// <returns></returns>
-        public static Color GetRandom(this Color source)
-        {
-            return (generateColor(source, false, new HSB { H = 0, S = 0, B = 0 }, new HSB { H = 360, S = 1, B = 255 }));
-        }
+        
         /// <summary>
         /// Returns a random color within a brightness boundry
         /// </summary>
@@ -45,15 +37,7 @@ namespace XCOM2Launcher.Mod
             }
             throw new ArgumentOutOfRangeException();
         }
-        /// <summary>
-        /// Returns a random shade of the color
-        /// </summary>
-        /// <param name="source">Base color for the returned shade</param>
-        /// <returns></returns>
-        public static Color GetRandomShade(this Color source)
-        {
-            return (generateColor(source, true, new HSB { H = 0, S = 1, B = 0 }, new HSB { H = 360, S = 1, B = 255 }));
-        }
+
         /// <summary>
         /// Returns a random color within a brightness boundry
         /// </summary>
@@ -70,6 +54,7 @@ namespace XCOM2Launcher.Mod
 
             throw new ArgumentOutOfRangeException();
         }
+
         /// <summary>
         /// Process parameters and returns a color
         /// </summary>
@@ -103,35 +88,6 @@ namespace XCOM2Launcher.Mod
             var rgbvalues = ConvertToRGB(hsbValues);
 
             return Color.FromArgb(source.A, (byte)rgbvalues.R, (byte)rgbvalues.G, (byte)rgbvalues.B);
-        }
-
-        public static Color GetContrast(this Color Source, bool PreserveOpacity)
-        {
-            var inputColor = Source;
-            //if RGB values are close to each other by a diff less than 10%, 
-            // then if RGB values are lighter side, decrease the blue by 50% (eventually it will increase in conversion below), 
-            // if RGB values are on darker side, decrease yellow by about 50% (it will increase in conversion)
-            var avgColorValue = (byte)((Source.R + Source.G + Source.B) / 3);
-            var diff_r = Math.Abs(Source.R - avgColorValue);
-            var diff_g = Math.Abs(Source.G - avgColorValue);
-            var diff_b = Math.Abs(Source.B - avgColorValue);
-            if (diff_r < 20 && diff_g < 20 && diff_b < 20) //The color is a shade of gray
-            {
-                inputColor = avgColorValue < 123
-                           ? Color.FromArgb(Source.A, 220, 230, 50)
-                           : Color.FromArgb(Source.A, 255, 255, 50);
-            }
-            var sourceAlphaValue = Source.A;
-            if (!PreserveOpacity)
-            {
-                sourceAlphaValue = Math.Max(Source.A, (byte)127); //We don't want contrast color to be more than 50% transparent ever.
-            }
-            var rgb = new RGB { R = inputColor.R, G = inputColor.G, B = inputColor.B };
-            var hsb = ConvertToHSB(rgb);
-            hsb.H = hsb.H < 180 ? hsb.H + 180 : hsb.H - 180;
-            //_hsb.B = _isColorDark ? 240 : 50; //Added to create dark on light, and light on dark
-            rgb = ConvertToRGB(hsb);
-            return Color.FromArgb(sourceAlphaValue, (int)rgb.R, (int)rgb.G, (int)rgb.B);
         }
 
         #region Code from MSDN
@@ -183,6 +139,7 @@ namespace XCOM2Launcher.Mod
                 B = b1 + m
             };
         }
+
         internal static HSB ConvertToHSB(RGB rgb)
         {
             // Following code is taken as it is from MSDN. See link below.
@@ -228,20 +185,24 @@ namespace XCOM2Launcher.Mod
                 B = brightness
             };
         }
+
         private static double Max(double d1, double d2, double d3)
         {
             return Math.Max(d1 > d2 ? d1 : d2, d3);
         }
+
         private static double Min(double d1, double d2, double d3)
         {
             return Math.Min(d1 < d2 ? d1 : d2, d3);
         }
+
         internal struct RGB
         {
             internal double R;
             internal double G;
             internal double B;
         }
+
         internal struct HSB
         {
             internal double H;

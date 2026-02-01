@@ -5,10 +5,6 @@ namespace XCOM2Launcher
 {
     public class WindowSettings
     {
-        public WindowSettings()
-        {
-        }
-
         public WindowSettings(Form form)
         {
             State = form.WindowState;

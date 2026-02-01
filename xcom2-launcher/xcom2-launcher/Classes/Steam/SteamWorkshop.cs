@@ -14,16 +14,6 @@ namespace XCOM2Launcher.Steam
         public ulong ItemID { get; set; }
         public ulong BytesProcessed { get; set; }
         public ulong BytesTotal { get; set; }
-        public double Process
-        {
-            get
-            {
-                if (BytesTotal == 0)
-                    return double.NaN;
-
-                return BytesProcessed / BytesTotal;
-            }
-        }
     }
 
     public class InstallInfo

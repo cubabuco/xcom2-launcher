@@ -19,16 +19,7 @@ namespace XCOM2Launcher.Steam
         static Workshop()
         {
             SteamManager.EnsureInitialized();
-            _downloadItemCallback = Callback<DownloadItemResult_t>.Create(result => OnItemDownloaded?.Invoke(null, new DownloadItemEventArgs() { Result = result }));
-        }
-
-        public static ulong[] GetSubscribedItems()
-        {
-            var num = SteamUGC.GetNumSubscribedItems();
-            var ids = new PublishedFileId_t[num];
-            SteamUGC.GetSubscribedItems(ids, num);
-
-            return ids.Select(t => t.m_PublishedFileId).ToArray();
+            //_downloadItemCallback = Callback<DownloadItemResult_t>.Create(result => OnItemDownloaded?.Invoke(null, new DownloadItemEventArgs() { Result = result }));
         }
 
         public static void Subscribe(ulong id)
@@ -39,18 +30,6 @@ namespace XCOM2Launcher.Steam
         public static void Unsubscribe(ulong id)
         {
             SteamUGC.UnsubscribeItem(id.ToPublishedFileID());
-        }
-
-        /// <summary>
-        /// Returns the UGC Details for the specified workshop id.
-        /// </summary>
-        /// <param name="id">Workshop id</param>
-        /// <param name="getFullDescription">Sets whether to return the full description for the item. If set to false, the description is truncated at 255 bytes.</param>
-        /// <returns>The requested data or the default struct (check for m_eResult == EResultNone), if the request failed.</returns>
-        public static async Task<SteamUGCDetails> GetDetailsAsync(ulong id, bool getFullDescription = false)
-        {
-            var result = await GetDetailsAsync(new List<ulong> { id }, getFullDescription).ConfigureAwait(false);
-            return result.FirstOrDefault() ?? new SteamUGCDetails(new SteamUGCDetails_t(), Array.Empty<ulong>());
         }
 
         /// <summary>
@@ -119,38 +98,6 @@ namespace XCOM2Launcher.Steam
             return (EItemState)SteamUGC.GetItemState(new PublishedFileId_t(id));
         }
 
-        public static InstallInfo GetInstallInfo(ulong id)
-        {
-            ulong punSizeOnDisk;
-            string pchFolder;
-            uint punTimeStamp;
-
-            SteamUGC.GetItemInstallInfo(new PublishedFileId_t(id), out punSizeOnDisk, out pchFolder, 256, out punTimeStamp);
-
-            return new InstallInfo
-            {
-                ItemID = id,
-                SizeOnDisk = punSizeOnDisk,
-                Folder = pchFolder,
-                TimeStamp = new DateTime(punTimeStamp * 10)
-            };
-        }
-
-        public static UpdateInfo GetDownloadInfo(ulong id)
-        {
-            ulong punBytesProcessed;
-            ulong punBytesTotal;
-
-            SteamUGC.GetItemDownloadInfo(new PublishedFileId_t(id), out punBytesProcessed, out punBytesTotal);
-
-            return new UpdateInfo
-            {
-                ItemID = id,
-                BytesProcessed = punBytesProcessed,
-                BytesTotal = punBytesTotal
-            };
-        }
-
         #region Download Item
         public class DownloadItemEventArgs : EventArgs
         {
@@ -158,7 +105,7 @@ namespace XCOM2Launcher.Steam
         }
 
         // ReSharper disable once NotAccessedField.Local
-        private static Callback<DownloadItemResult_t> _downloadItemCallback;
+        //private static Callback<DownloadItemResult_t> _downloadItemCallback;
         public delegate void DownloadItemHandler(object sender, DownloadItemEventArgs e);
         public static event DownloadItemHandler OnItemDownloaded;
         public static void DownloadItem(ulong id)
