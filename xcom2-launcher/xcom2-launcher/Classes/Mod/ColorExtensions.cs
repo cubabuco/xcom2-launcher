@@ -21,7 +21,7 @@ namespace XCOM2Launcher.Mod
         {
             return (generateColor(source, true, new HSB { H = 0, S = 0.2d, B = 255 }, new HSB { H = 360, S = 0.5d, B = 255 }));
         }
-        
+
         /// <summary>
         /// Returns a random color within a brightness boundry
         /// </summary>

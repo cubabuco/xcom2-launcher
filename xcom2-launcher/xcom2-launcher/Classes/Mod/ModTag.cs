@@ -35,7 +35,7 @@ namespace XCOM2Launcher.Mod
 
             return random.NextDouble() <= 0.5 ? newColor.GetPastelShade() : newColor;
         }
-        
+
         public ModTag(string label)
         {
             Color = RandomColor();

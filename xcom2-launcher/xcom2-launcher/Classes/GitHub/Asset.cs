@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace XCOM2Launcher.GitHub
+﻿namespace XCOM2Launcher.GitHub
 {
     public class Asset
     {

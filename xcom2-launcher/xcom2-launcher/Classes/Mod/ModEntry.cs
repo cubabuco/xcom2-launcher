@@ -17,24 +17,24 @@ namespace XCOM2Launcher.Mod
 {
     public class ModEntry
     {
-        [JsonIgnore] 
+        [JsonIgnore]
         public const string DEFAULT_AUTHOR_NAME = "Unknown";
-        [JsonIgnore] 
+        [JsonIgnore]
         public const string MODFILE_DISABLE_POSTFIX = "-disabled";
 
-        [JsonIgnore] 
+        [JsonIgnore]
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(nameof(ModEntry));
 
-        [JsonIgnore] 
+        [JsonIgnore]
         private string _image;
 
-        [JsonIgnore] 
+        [JsonIgnore]
         private IEnumerable<ModClassOverride> _overrides;
-        [JsonIgnore] 
+        [JsonIgnore]
         private static readonly Regex s_classOverridesRegex = new Regex("^[+]?ModClassOverrides=\\(BaseGameClass=\"([^\"]+)\",ModClass=\"([^\"]+)\"\\)", RegexOptions.Compiled);
-        [JsonIgnore] 
+        [JsonIgnore]
         private static readonly Regex s_whitespaceRegex = new Regex("\\s+", RegexOptions.Compiled);
-        [JsonIgnore] 
+        [JsonIgnore]
         private static readonly Regex s_screenClassRegex = new Regex(@"(?i)^\s*ScreenClass\s*=\s*(?:class')?([a-z_]+)", RegexOptions.Compiled);
 
         /// <summary>
