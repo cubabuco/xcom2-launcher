@@ -1,8 +1,8 @@
+using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Steamworks;
 
 namespace XCOM2Launcher.Steam
 {
@@ -19,9 +19,9 @@ namespace XCOM2Launcher.Steam
         static Workshop()
         {
             SteamManager.EnsureInitialized();
-            _downloadItemCallback = Callback<DownloadItemResult_t>.Create(result => OnItemDownloaded?.Invoke(null, new DownloadItemEventArgs() { Result = result}));
+            _downloadItemCallback = Callback<DownloadItemResult_t>.Create(result => OnItemDownloaded?.Invoke(null, new DownloadItemEventArgs() { Result = result }));
         }
-        
+
         public static ulong[] GetSubscribedItems()
         {
             var num = SteamUGC.GetNumSubscribedItems();
@@ -49,8 +49,8 @@ namespace XCOM2Launcher.Steam
         /// <returns>The requested data or the default struct (check for m_eResult == EResultNone), if the request failed.</returns>
         public static async Task<SteamUGCDetails> GetDetailsAsync(ulong id, bool getFullDescription = false)
         {
-            var result = await GetDetailsAsync(new List<ulong> {id}, getFullDescription).ConfigureAwait(false);
-            return result?.FirstOrDefault() ?? new SteamUGCDetails(new SteamUGCDetails_t(), Array.Empty<ulong>());
+            var result = await GetDetailsAsync(new List<ulong> { id }, getFullDescription).ConfigureAwait(false);
+            return result.FirstOrDefault() ?? new SteamUGCDetails(new SteamUGCDetails_t(), Array.Empty<ulong>());
         }
 
         /// <summary>
@@ -61,25 +61,27 @@ namespace XCOM2Launcher.Steam
         /// <returns>The requested data or null, if the request failed.</returns>
         public static async Task<List<SteamUGCDetails>> GetDetailsAsync(List<ulong> identifiers, bool getFullDescription = false)
         {
+            var nullResult = new List<SteamUGCDetails>();
+
             if (identifiers == null)
                 throw new ArgumentNullException(nameof(identifiers));
 
             if (identifiers.Count > MAX_UGC_RESULTS)
                 throw new ArgumentException($"Max allowed number of identifiers is {MAX_UGC_RESULTS}.");
 
-            if (!SteamManager.IsSteamRunning()) return null;
+            if (!SteamManager.IsSteamRunning()) return nullResult;
 
             var idList = identifiers
                 .Where(x => x > 0)
                 .Distinct()
                 .Select(x => new PublishedFileId_t(x))
                 .ToArray();
-            if (idList.Length == 0) return new List<SteamUGCDetails>();
+            if (idList.Length == 0) return nullResult;
 
             var queryHandle = SteamUGC.CreateQueryUGCDetailsRequest(idList, (uint)idList.Length);
             SteamUGC.SetReturnLongDescription(queryHandle, getFullDescription);
             SteamUGC.SetReturnChildren(queryHandle, true); // required, otherwise m_unNumChildren will always be 0
-        
+
             var apiCall = SteamUGC.SendQueryUGCRequest(queryHandle);
 
             var results = await SteamManager.QueryResultAsync<SteamUGCQueryCompleted_t, List<SteamUGCDetails>>(apiCall,
@@ -92,9 +94,9 @@ namespace XCOM2Launcher.Steam
                         // Retrieve Value
                         if (!SteamUGC.GetQueryUGCResult(queryHandle, i, out var detail))
                         {
-                            return new List<SteamUGCDetails>();
+                            return nullResult;
                         }
-                        
+
                         var childFileIds = new PublishedFileId_t[detail.m_unNumChildren];
                         var childIds = Array.Empty<ulong>();
                         var success = SteamUGC.GetQueryUGCChildren(queryHandle, i, childFileIds, (uint)childFileIds.Length);
@@ -148,7 +150,7 @@ namespace XCOM2Launcher.Steam
                 BytesTotal = punBytesTotal
             };
         }
-        
+
         #region Download Item
         public class DownloadItemEventArgs : EventArgs
         {

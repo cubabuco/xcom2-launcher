@@ -416,7 +416,7 @@ namespace JR.Utils.GUI.Forms
 
             //These are the possible buttons (in a standard MessageBox)
             private enum ButtonID { OK = 0, CANCEL, YES, NO, ABORT, RETRY, IGNORE };
-            
+
             //These are the buttons texts for different languages. 
             //If you want to add a new language, add it here and in the GetButtonText-Function
             private enum TwoLetterISOLanguageID { en, de, es, it };
@@ -462,7 +462,7 @@ namespace JR.Utils.GUI.Forms
             /// <returns>The string rows as 1-dimensional array</returns>
             private static string[] GetStringRows(string message)
             {
-                if (string.IsNullOrEmpty(message)) return null;
+                if (string.IsNullOrEmpty(message)) return new string[] { };
 
                 var messageRows = message.Split(new char[] { '\n' }, StringSplitOptions.None);
                 return messageRows;
@@ -477,14 +477,14 @@ namespace JR.Utils.GUI.Forms
             private string GetButtonText(ButtonID buttonID)
             {
                 var buttonTextArrayIndex = Convert.ToInt32(buttonID);
-                
+
                 switch (this.languageID)
                 {
                     case TwoLetterISOLanguageID.de: return BUTTON_TEXTS_GERMAN_DE[buttonTextArrayIndex];
                     case TwoLetterISOLanguageID.es: return BUTTON_TEXTS_SPANISH_ES[buttonTextArrayIndex];
                     case TwoLetterISOLanguageID.it: return BUTTON_TEXTS_ITALIAN_IT[buttonTextArrayIndex];
 
-                    default:                        return BUTTON_TEXTS_ENGLISH_EN[buttonTextArrayIndex];
+                    default: return BUTTON_TEXTS_ENGLISH_EN[buttonTextArrayIndex];
                 }
             }
 
@@ -540,17 +540,17 @@ namespace JR.Utils.GUI.Forms
 
                 //Get rows. Exit if there are no rows to render...
                 var stringRows = GetStringRows(text);
-                if (stringRows == null) return;
+                if (!stringRows.Any()) return;
 
                 //Calculate whole text height
                 var textHeight = TextRenderer.MeasureText(text, FONT).Height;
-                    
+
                 //Calculate width for longest text line
                 const int SCROLLBAR_WIDTH_OFFSET = 15;
                 var longestTextRowWidth = stringRows.Max(textForRow => TextRenderer.MeasureText(textForRow, FONT).Width);
                 var captionWidth = TextRenderer.MeasureText(caption, SystemFonts.CaptionFont).Width;
                 var textWidth = Math.Max(longestTextRowWidth + SCROLLBAR_WIDTH_OFFSET, captionWidth);
-                
+
                 //Calculate margins
                 var marginWidth = flexibleMessageBoxForm.Width - flexibleMessageBoxForm.richTextBoxMessage.Width;
                 var marginHeight = flexibleMessageBoxForm.Height - flexibleMessageBoxForm.richTextBoxMessage.Height;
@@ -617,7 +617,7 @@ namespace JR.Utils.GUI.Forms
                         flexibleMessageBoxForm.button3.Visible = true;
                         flexibleMessageBoxForm.button3.Text = flexibleMessageBoxForm.GetButtonText(ButtonID.IGNORE);
                         flexibleMessageBoxForm.button3.DialogResult = DialogResult.Ignore;
-                        
+
                         flexibleMessageBoxForm.ControlBox = false;
                         break;
 
@@ -757,7 +757,7 @@ namespace JR.Utils.GUI.Forms
                 }
                 finally // Omit catch -> Let the caller of FlexibleMessageBoxForm decide what to do with this exception.
                 {
-                    
+
                     Cursor.Current = Cursors.Default;
                 }
 

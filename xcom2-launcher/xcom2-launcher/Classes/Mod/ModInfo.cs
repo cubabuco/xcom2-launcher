@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
@@ -9,9 +8,12 @@ namespace XCOM2Launcher.Mod
 {
     public class ModInfo
     {
-        public ModInfo(string filepath)
+        public ModInfo(string[] filepath)
         {
-            LoadFile(filepath);
+            if (!filepath.Any())
+                return;
+
+            LoadFile(filepath[0]);
         }
 
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(nameof(ModInfo));
@@ -27,9 +29,6 @@ namespace XCOM2Launcher.Mod
 
         protected void LoadFile(string filepath)
         {
-            if (!File.Exists(filepath))
-                return;
-
             string[] validKeys = { "publishedfileid", "title", "category", "description", "tags", "contentimage", "requiresxpack" };
             var keyValPairs = new Dictionary<string, string>();
 

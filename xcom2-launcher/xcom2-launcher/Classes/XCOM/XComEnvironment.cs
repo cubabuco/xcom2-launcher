@@ -1,9 +1,9 @@
+using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Steamworks;
 
 namespace XCOM2Launcher.XCOM
 {
@@ -59,7 +59,7 @@ namespace XCOM2Launcher.XCOM
             }
 
             Log.Error("Steam API failed to detect a valid game directory.");
-            
+
             // Try to deduce game path from available mod directories
             var dirs = DetectModDirs();
             foreach (var dir in dirs.Where<string>(dir => dir.ToLower().Contains("\\steamapps\\")))
@@ -102,28 +102,30 @@ namespace XCOM2Launcher.XCOM
         /// <returns>List of mod directories. NULL if the ini file is missing or couldn't be accessed.</returns>
         public IEnumerable<string> DetectModDirs()
         {
+            var emptyList = new string[0];
+
             // Prevent stack overflow (Issue #19)
             if (_gameDir == null)
-                return new string[0];
+                return emptyList;
 
             List<string> currentModDirs;
             var validModDirs = new List<string>();
 
             try
             {
-                currentModDirs = GetConfigFile("Engine").Get("Engine.DownloadableContentEnumerator", "ModRootDirs") ?? new List<string>();
+                currentModDirs = GetConfigFile("Engine").Get("Engine.DownloadableContentEnumerator", "ModRootDirs");
             }
             catch (IOException ex)
             {
                 Log.Warn("Unable to access 'XComEngine.ini'", ex);
-                return null;
+                return emptyList;
             }
             catch (UnauthorizedAccessException ex)
             {
                 Log.Warn("Unable to access 'XComEngine.ini'", ex);
-                return null;
+                return emptyList;
             }
-          
+
             // Add default Steam Workshop mod path if it is missing.
             var appId = SteamAppId.ToString();
             if (!currentModDirs.Any(dir => dir.EndsWith(appId) || dir.EndsWith(appId + "\\")))
@@ -176,13 +178,13 @@ namespace XCOM2Launcher.XCOM
             {
                 // Retrieve entires from XComModOptions
                 var configFile = GetConfigFile("ModOptions");
-                var mods = configFile.Get("Engine.XComModOptions", "ActiveMods") ?? new List<string>();
-                
+                var mods = configFile.Get("Engine.XComModOptions", "ActiveMods");
+
                 // Retrieve entires from DefaultModOptions
                 configFile.Entries.Clear();
                 configFile.CreateFromDefault("ModOptions");
-                mods.AddRange(configFile.Get("Engine.XComModOptions", "ActiveMods")?.ToArray() ?? new string[0]);
-                
+                mods.AddRange(configFile.Get("Engine.XComModOptions", "ActiveMods"));
+
                 // Prepare result
                 mods = mods.ConvertAll(x => x.TrimStart('"').TrimEnd('"'));     // default config may contain entries encapsulated in ""
                 mods = mods.Distinct().ToList();

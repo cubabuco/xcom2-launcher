@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using log4net.Appender;
 using log4net.Core;
 using Sentry;
 using Sentry.Extensibility;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 namespace XCOM2Launcher.Log4Net
 {
@@ -99,9 +99,16 @@ namespace XCOM2Launcher.Log4Net
                         Name = Constants.SdkName,
                         Version = NameAndVersion.Version
                     },
-                    Logger = loggingEvent.LoggerName,
-                    Level = loggingEvent.ToSentryLevel()
+                    Logger = loggingEvent.LoggerName
                 };
+
+                var level = loggingEvent.ToSentryLevel();
+
+                if (level.Any())
+                {
+                    evt.Level = level[0];
+                }
+
 
                 evt.Sdk.AddPackage(ProtocolPackageName, NameAndVersion.Version ?? string.Empty);
 

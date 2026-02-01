@@ -38,9 +38,9 @@ namespace XCOM2Launcher.Mod
 
         public ModTag() { }
 
-        public ModTag(string label, Color? color = null)
+        public ModTag(string label)
         {
-            Color = color ?? RandomColor();
+            Color = RandomColor();
             Label = label;
         }
     }
