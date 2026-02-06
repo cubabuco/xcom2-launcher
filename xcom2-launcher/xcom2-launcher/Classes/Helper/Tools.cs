@@ -30,7 +30,6 @@ namespace XCOM2Launcher.Helper
 
                 Cursor.Current = Cursors.Default;
             }
-
         }
 
         public static void HandleNavigateWebBrowserControl(object sender, WebBrowserNavigatingEventArgs args)

@@ -42,8 +42,6 @@ namespace XCOM2Launcher.Forms
             }
         }
 
-        public string AssemblyVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString();
-
         public string AssemblyDescription
         {
             get

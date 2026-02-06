@@ -185,19 +185,6 @@ namespace XCOM2Launcher.XCOM
         public bool Has(string section) => Entries.ContainsKey(section);
         public bool Has(string section, string key) => Has(section) && Entries[section].ContainsKey(key);
 
-        public bool Has(string section, string key, string value)
-            => Has(section, key) && Entries[section][key].Contains(value);
-
-        /// <summary>
-        /// Removes the section with the specified name.
-        /// </summary>
-        /// <param name="section">Name of the section to remove</param>
-        /// <returns>Returns true if the section is removed</returns>
-        public bool Remove(string section)
-        {
-            return Entries.Remove(section);
-        }
-
         /// <summary>
         /// Removes all values associated with the given key in the given section
         /// </summary>

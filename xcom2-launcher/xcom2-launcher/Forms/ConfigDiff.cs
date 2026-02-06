@@ -535,18 +535,6 @@ namespace XCOM2Launcher.Forms
             }
 
             /// <summary>
-            /// Clone
-            /// </summary>
-            public Lines Clone()
-            {
-                Lines result = new Lines(this.Count);
-                foreach (var line in this)
-                    result.Add(new Line(line.line));
-
-                return result;
-            }
-
-            /// <summary>
             /// Is lines equal?
             /// </summary>
             public bool Equals(Lines other)
@@ -582,22 +570,6 @@ namespace XCOM2Launcher.Forms
                 }
 
                 return result;
-            }
-        }
-
-        /// <summary>
-        /// A string containing several conflicting versions
-        /// </summary>
-        public class ConflictedLine : Line
-        {
-            public readonly Lines version1;
-            public readonly Lines version2;
-
-            public ConflictedLine(Lines version1, Lines version2)
-                : base("?")
-            {
-                this.version1 = version1;
-                this.version2 = version2;
             }
         }
     }

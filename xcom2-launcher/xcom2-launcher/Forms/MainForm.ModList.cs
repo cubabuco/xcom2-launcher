@@ -298,7 +298,7 @@ namespace XCOM2Launcher.Forms
             }
         }
 
-        private bool AddTag(ModEntry mod, string newTag)
+        private void AddTag(ModEntry mod, string newTag)
         {
             if (mod != null && string.IsNullOrEmpty(newTag) == false && mod.Tags.Contains(newTag) == false)
             {
@@ -308,11 +308,7 @@ namespace XCOM2Launcher.Forms
                 }
 
                 mod.Tags.Add(newTag);
-
-                return true;
             }
-
-            return false;
         }
 
 

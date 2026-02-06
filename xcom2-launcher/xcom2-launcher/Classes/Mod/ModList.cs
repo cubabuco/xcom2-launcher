@@ -301,8 +301,7 @@ namespace XCOM2Launcher.Mod
 
             var steamMods = new List<ModEntry>();
             var localMods = new List<ModEntry>();
-            var emptyList = new List<ModEntry>(0);
-
+            
             foreach (var mod in mods)
             {
                 if (!VerifyModState(mod, settings))
